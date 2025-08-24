@@ -3,38 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>لفة الحظ</title>
+  <title>مواعيد مباريات UFC</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
-  <style>
-    body {
-      text-align: center;
-      padding: 2rem;
-    }
-    #result {
-      font-size: 2rem;
-      margin-top: 1rem;
-      font-weight: bold;
-    }
-    button[disabled] {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  </style>
 </head>
 <body>
-
-  <nav class="container-fluid">
-    <ul>
-      <li><strong>🎰 لفة الحظ</strong></li>
-    </ul>
-    <ul>
-      <li><a href="#">الرئيسية</a></li>
-      <li><a href="#">تعليمات</a></li>
-      <li><a href="#" role="button">ابدأ</a></li>
-    </ul>
-  </nav>
-
   <main class="container">
+    <h2>📅 مواعيد مباريات UFC القادمة</h2>
+    <table role="grid" id="ufcTable">
+      <thead>
+        <tr>
+          <th>التاريخ</th>
+          <th>المباراة</th>
+          <th>المكان</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script>
+    async function getUFCMatches() {
+      try {
+        // هذا endpoint مجاني من TheSportsDB يعرض أحداث UFC
+        const res = await fetch("https://www.thesportsdb.com/api/v1/json/3/eventsnextleague.php?id=128073"); 
+        const data = await res.json();
+
+        const tableBody = document.querySelector("#ufcTable tbody");
+        data.events.forEach(event => {
+          const row = document.createElement("tr");
+          row.innerHTML = 
+            <td>${event.dateEvent}</td>
+            <td>${event.strEvent}</td>
+            <td>${event.strVenue || "غير متاح"}</td>
+          ;
+          tableBody.appendChild(row);
+        });
+      } catch (error) {
+        console.error("خطأ في جلب البيانات:", error);
+      }
+    }
+
+    getUFCMatches();
+  </script>
+</body>
+</html>  <main class="container">
     <div class="grid">
       <section>
         <hgroup>
