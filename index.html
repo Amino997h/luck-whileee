@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>لفة الحظ</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    body {
+      text-align: center;
+      padding: 2rem;
+    }
+    #result {
+      font-size: 2rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    button[disabled] {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>🎰 لفة الحظ</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#">الرئيسية</a></li>
+      <li><a href="#">تعليمات</a></li>
+      <li><a href="#" role="button">ابدأ</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <div class="grid">
+      <section>
+        <hgroup>
+          <h2>جرب حظك!</h2>
+          <h3>كل دقيقة فرصة جديدة</h3>
+        </hgroup>
+        <p>اضغط على الزر أدناه لاختيار رقم عشوائي. كلما كان الرقم أكبر كان أصعب أن يظهر. الحد الأقصى هو <strong>1,000,000</strong>.</p>
+        
+        <button id="startButton">بدء</button>
+        <p id="result"></p>
+      </section>
+    </div>
+  </main>
+
+  <footer class="container">
+    <small><a href="#">حقوق الموقع</a> • <a href="#">تواصل معنا</a></small>
+  </footer>
+
+  <script>
+    const button = document.getElementById("startButton");
+    const result = document.getElementById("result");
+
+    function weightedRandom() {
+      // توزيع احتمالي بحيث الأرقام الصغيرة أسهل
+      // نأخذ رقم عشوائي بين 0 و 1، ثم نرفع للأس 6 لتقليل حظ الأرقام الكبيرة
+      const r = Math.random();
+      return Math.floor(Math.pow(r, 6) * 1_000_000) + 1;
+    }
+
+    button.addEventListener("click", () => {
+      const number = weightedRandom();
+      result.textContent = "🎉 رقمك هو: " + number;
+
+      // تعطيل الزر لمدة دقيقة
+      button.disabled = true;
+      button.textContent = "انتظر دقيقة...";
+      setTimeout(() => {
+        button.disabled = false;
+        button.textContent = "بدء";
+      }, 60000); // 60000 ms = 1 دقيقة
+    });
+  </script>
+</body>
+</html>
